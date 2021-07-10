@@ -1,38 +1,93 @@
+* {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+html {
+  font-size: 62.5%;
+}
+
 .App {
+  width: 50em;
+  font-family: "Times New Roman", Times, serif;
+}
+
+#main-title {
+  font-size: 5rem;
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.labels {
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  width: 100%;
+}
+
+.break-session {
+  width: 50%;
+  font-size: 2rem;
+  text-align: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  border: solid;
+  border-radius: 2rem;
+  margin: 0 1em;
 }
 
-.App-link {
-  color: #61dafb;
+body {
+  display: flex;
+  justify-content: center;
+  height: 100vh;
+  align-items: center;
+  background: rgb(238, 174, 202);
+  background: radial-gradient(
+    circle,
+    rgba(238, 174, 202, 1) 0%,
+    rgba(148, 187, 233, 1) 100%
+  );
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.aruuba {
+  font-size: 3rem;
+  flex-basis: 100%;
+}
+
+.aruuba.nom:hover {
+  cursor: default;
+}
+
+.aruuba:hover {
+  cursor: pointer;
+}
+
+.seedha {
+  display: flex;
+  justify-content: center;
+}
+
+.timer {
+  margin-top: 0.5em;
+  border-radius: 0.5em;
+  width: 50%;
+  text-align: center;
+  font-size: 5rem;
+  border: solid;
+}
+
+#timer-label {
+  display: flex;
+  font-size: 3rem;
+  justify-content: center;
+  margin-top: 0.25em;
+}
+
+#time-left {
+  margin-bottom: 0.15em;
+}
+
+.timer-control {
+  margin-top: 1em;
+  font-size: 3rem;
 }
