@@ -91,3 +91,11 @@ body {
   margin-top: 1em;
   font-size: 3rem;
 }
+
+.player {
+  margin: 0 0.2em;
+}
+
+.player:hover {
+  cursor: pointer;
+}

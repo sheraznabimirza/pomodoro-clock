@@ -7,9 +7,11 @@ import {
   FaPlay,
   FaSyncAlt,
 } from "react-icons/fa";
+
 function App() {
   const [breakLength, setBreakLength] = useState(5);
   const [sessionLength, setSessionLength] = useState(25);
+  const [timer, setTimer] = useState(false);
 
   const handleSessionUp = () => {
     if (sessionLength < 60) {
@@ -35,6 +37,19 @@ function App() {
     }
   };
 
+  const handleReset = () => {
+    setBreakLength(5);
+    setSessionLength(25);
+  };
+
+  const handlePlayer = (e) => {
+    const { innerText } = e.target;
+    const eTarget = e.target.value;
+    console.log(e.target.value);
+    console.log(eTarget);
+    console.log(innerText);
+  };
+
   return (
     <div className="App">
       <h1 id="main-title">Pomodoro Clock</h1>
@@ -43,7 +58,7 @@ function App() {
           <h3 id="break-label">Break Length</h3>
           <div className="seedha">
             <FaArrowDown className="aruuba" onClick={handleBreakDown} />
-            <div className="aruuba nom">{breakLength}</div>
+            <span className="aruuba nom">{breakLength}</span>
             <FaArrowUp className="aruuba" onClick={handleBreakUp} />
           </div>
         </div>
@@ -51,21 +66,21 @@ function App() {
           <h3 id="session-label">Session Length</h3>
           <div className="seedha">
             <FaArrowDown className="aruuba" onClick={handleSessionDown} />
-            <div className="aruuba nom">{sessionLength}</div>
+            <span className="aruuba nom">{sessionLength}</span>
             <FaArrowUp className="aruuba" onClick={handleSessionUp} />
           </div>
         </div>
       </div>
       <div className="seedha">
         <div className="timer">
-          <div id="timer-label">Session</div>
-          <div id="time-left">01:00</div>
+          <span id="timer-label">Session</span>
+          <span id="time-left">{sessionLength}:00</span>
         </div>
       </div>
       <div className="timer-control seedha">
-        <FaPlay />
-        <FaPause />
-        <FaSyncAlt />
+        <FaPlay value={2} className="player" onClick={handlePlayer} />
+        <FaPause value={false} className="player" onClick={handlePlayer} />
+        <FaSyncAlt onClick={handleReset} className="player" />
       </div>
     </div>
   );
