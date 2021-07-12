@@ -12,16 +12,24 @@ function App() {
   const [breakLength, setBreakLength] = useState(5);
   const [sessionLength, setSessionLength] = useState(25);
   const [timer, setTimer] = useState(false);
+  const [currentTimer, setCurrentTimer] = useState("Session");
+  const [daTime, setDaTime] = useState(25 * 60);
 
   const handleSessionUp = () => {
     if (sessionLength < 60) {
       setSessionLength(sessionLength + 1);
+      if (currentTimer === "Session") {
+        setDaTime((sessionLength + 1) * 60);
+      }
     }
   };
 
   const handleSessionDown = () => {
     if (sessionLength > 1) {
       setSessionLength(sessionLength - 1);
+      if (currentTimer === "Session") {
+        setDaTime((sessionLength - 1) * 60);
+      }
     }
   };
 
@@ -50,37 +58,59 @@ function App() {
     console.log(innerText);
   };
 
+  const convertTime = (time) => {
+    const minutes = Math.floor(time / 60);
+    let seconds = time % 60;
+
+    seconds = seconds < 10 ? "0" + seconds : seconds;
+
+    return `${minutes}:${seconds}`;
+  };
+
+  const breakProps = {
+    title: "Break Length",
+    upFunc: handleBreakUp,
+    downFunc: handleBreakDown,
+    timerLength: breakLength,
+  };
+
+  const sessionProps = {
+    title: "Session Length",
+    upFunc: handleSessionUp,
+    downFunc: handleSessionDown,
+    timerLength: sessionLength,
+  };
+
   return (
     <div className="App">
       <h1 id="main-title">Pomodoro Clock</h1>
       <div className="labels">
-        <div className="break-session">
-          <h3 id="break-label">Break Length</h3>
-          <div className="seedha">
-            <FaArrowDown className="aruuba" onClick={handleBreakDown} />
-            <span className="aruuba nom">{breakLength}</span>
-            <FaArrowUp className="aruuba" onClick={handleBreakUp} />
-          </div>
-        </div>
-        <div className="break-session">
-          <h3 id="session-label">Session Length</h3>
-          <div className="seedha">
-            <FaArrowDown className="aruuba" onClick={handleSessionDown} />
-            <span className="aruuba nom">{sessionLength}</span>
-            <FaArrowUp className="aruuba" onClick={handleSessionUp} />
-          </div>
-        </div>
+        <SeshBreak {...breakProps} />
+        <SeshBreak {...sessionProps} />
       </div>
       <div className="seedha">
         <div className="timer">
-          <span id="timer-label">Session</span>
-          <span id="time-left">{sessionLength}:00</span>
+          <span id="timer-label">{currentTimer}</span>
+          <span id="time-left">{convertTime(daTime)}</span>
         </div>
       </div>
       <div className="timer-control seedha">
         <FaPlay value={2} className="player" onClick={handlePlayer} />
         <FaPause value={false} className="player" onClick={handlePlayer} />
         <FaSyncAlt onClick={handleReset} className="player" />
+      </div>
+    </div>
+  );
+}
+
+function SeshBreak(props) {
+  return (
+    <div className="break-session">
+      <h2 id="break-label">{props.title}</h2>
+      <div className="seedha">
+        <FaArrowDown className="aruuba" onClick={props.downFunc} />
+        <span className="aruuba nom">{props.timerLength}</span>
+        <FaArrowUp className="aruuba" onClick={props.upFunc} />
       </div>
     </div>
   );
