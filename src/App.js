@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import "./App.css";
 import {
   FaArrowDown,
@@ -11,12 +11,14 @@ import {
 function App() {
   const [breakLength, setBreakLength] = useState(5);
   const [sessionLength, setSessionLength] = useState(25);
-  const [timer, setTimer] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [currentTimer, setCurrentTimer] = useState("Session");
   const [daTime, setDaTime] = useState(25 * 60);
 
+  let interval = useRef(null);
+
   const handleSessionUp = () => {
-    if (sessionLength < 60) {
+    if (sessionLength < 60 && !isPlaying) {
       setSessionLength(sessionLength + 1);
       if (currentTimer === "Session") {
         setDaTime((sessionLength + 1) * 60);
@@ -25,7 +27,7 @@ function App() {
   };
 
   const handleSessionDown = () => {
-    if (sessionLength > 1) {
+    if (sessionLength > 1 && !isPlaying) {
       setSessionLength(sessionLength - 1);
       if (currentTimer === "Session") {
         setDaTime((sessionLength - 1) * 60);
@@ -34,14 +36,20 @@ function App() {
   };
 
   const handleBreakUp = () => {
-    if (breakLength < 60) {
+    if (breakLength < 60 && !isPlaying) {
       setBreakLength(breakLength + 1);
+      if (currentTimer === "Break") {
+        setDaTime((breakLength + 1) * 60);
+      }
     }
   };
 
   const handleBreakDown = () => {
-    if (breakLength > 1) {
+    if (breakLength > 1 && !isPlaying) {
       setBreakLength(breakLength - 1);
+      if (currentTimer === "Break") {
+        setDaTime((breakLength - 1) * 60);
+      }
     }
   };
 
@@ -50,12 +58,22 @@ function App() {
     setSessionLength(25);
   };
 
-  const handlePlayer = (e) => {
-    const { innerText } = e.target;
-    const eTarget = e.target.value;
-    console.log(e.target.value);
-    console.log(eTarget);
-    console.log(innerText);
+  const handlePlayer = () => {
+    setIsPlaying(true);
+  };
+
+  const handlePauser = () => {
+    setIsPlaying(false);
+  };
+
+  const handlePlayPause = () => {
+    if (isPlaying && daTime > 0) {
+      interval = setInterval(() => {
+        setDaTime(daTime - 1);
+      }, 1000);
+    } else {
+      clearInterval(interval);
+    }
   };
 
   const convertTime = (time) => {
@@ -66,6 +84,13 @@ function App() {
 
     return `${minutes}:${seconds}`;
   };
+
+  useEffect(() => {
+    handlePlayPause();
+    return () => {
+      clearInterval(interval);
+    };
+  }, [isPlaying, daTime]);
 
   const breakProps = {
     title: "Break Length",
@@ -95,8 +120,8 @@ function App() {
         </div>
       </div>
       <div className="timer-control seedha">
-        <FaPlay value={2} className="player" onClick={handlePlayer} />
-        <FaPause value={false} className="player" onClick={handlePlayer} />
+        <FaPlay className="player" onClick={handlePlayer} />
+        <FaPause className="player" onClick={handlePauser} />
         <FaSyncAlt onClick={handleReset} className="player" />
       </div>
     </div>
