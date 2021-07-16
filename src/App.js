@@ -17,6 +17,7 @@ function App() {
 
   let interval = useRef(null);
 
+  // Increases Session time
   const handleSessionUp = () => {
     if (sessionLength < 60 && !isPlaying) {
       setSessionLength(sessionLength + 1);
@@ -26,6 +27,7 @@ function App() {
     }
   };
 
+  // Decreases Session time
   const handleSessionDown = () => {
     if (sessionLength > 1 && !isPlaying) {
       setSessionLength(sessionLength - 1);
@@ -35,6 +37,7 @@ function App() {
     }
   };
 
+  // Break time increase
   const handleBreakUp = () => {
     if (breakLength < 60 && !isPlaying) {
       setBreakLength(breakLength + 1);
@@ -44,6 +47,7 @@ function App() {
     }
   };
 
+  // Break time decrease
   const handleBreakDown = () => {
     if (breakLength > 1 && !isPlaying) {
       setBreakLength(breakLength - 1);
@@ -53,9 +57,12 @@ function App() {
     }
   };
 
+  // Resetting Everything
   const handleReset = () => {
+    setIsPlaying(false);
     setBreakLength(5);
     setSessionLength(25);
+    setDaTime(25 * 60);
   };
 
   const handlePlayer = () => {
@@ -66,8 +73,9 @@ function App() {
     setIsPlaying(false);
   };
 
+  // Sets decrement for the timer every second and also pauses the timer.
   const handlePlayPause = () => {
-    if (isPlaying && daTime > 0) {
+    if (isPlaying && daTime > -1) {
       interval = setInterval(() => {
         setDaTime(daTime - 1);
       }, 1000);
@@ -76,6 +84,7 @@ function App() {
     }
   };
 
+  // Converts total seconds to Minutes:Seconds format
   const convertTime = (time) => {
     const minutes = Math.floor(time / 60);
     let seconds = time % 60;
@@ -85,8 +94,22 @@ function App() {
     return `${minutes}:${seconds}`;
   };
 
+  // Switches between Session and Break
+  const switching = () => {
+    if (daTime < 0) {
+      if (currentTimer === "Session") {
+        setCurrentTimer("Break");
+        setDaTime(breakLength * 60);
+      } else {
+        setCurrentTimer("Session");
+        setDaTime(sessionLength * 60);
+      }
+    }
+  };
+
   useEffect(() => {
     handlePlayPause();
+    switching();
     return () => {
       clearInterval(interval);
     };
