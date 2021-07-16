@@ -86,10 +86,11 @@ function App() {
 
   // Converts total seconds to Minutes:Seconds format
   const convertTime = (time) => {
-    const minutes = Math.floor(time / 60);
+    let minutes = Math.floor(time / 60);
     let seconds = time % 60;
 
     seconds = seconds < 10 ? "0" + seconds : seconds;
+    minutes = minutes < 10 ? "0" + minutes : minutes;
 
     return `${minutes}:${seconds}`;
   };
